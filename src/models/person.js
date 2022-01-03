@@ -41,8 +41,12 @@ const create = async (person) => {
 
 const findByIdAndUpdate = async (id, person) => {
   const result = await session.run(
-    `MATCH (p:Person {id: '${id}'}) SET p.name = '${person.name}' return p.name`
+    // `MATCH (p:Person {id: '${id}'}) SET p.name = '${person.name}' return p.name`
     // `MATCH (s) WHERE id(s) = ${id} SET name= '${person.name}' return s`
+    `MATCH (p:Person {id: ${id}})
+    WITH p, p {.*} as snapshot
+    SET p.name = '${person.name}' 
+    return snapshot`
   );
   console.log(result);
   // return result.records[0].properties;
